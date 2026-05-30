@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:centerColor="@color/witube_blue"
+                android:endColor="@color/witube_background"
+                android:startColor="@color/witube_blue_deep" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="90"
+                android:endColor="#00091224"
+                android:startColor="#B3091224" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/bg_music_playlist_pattern" />
+</layer-list>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="witube_blue">#345766</color>
+    <color name="witube_blue_deep">#162A33</color>
+    <color name="witube_background">#162A33</color>
+    <color name="witube_background_soft">#345766</color>
+    <color name="witube_card">#E6162A33</color>
+    <color name="witube_card_stroke">#6682C8E5</color>
+    <color name="witube_field">#345766</color>
+    <color name="witube_accent">#82C8E5</color>
+    <color name="witube_text_primary">#F3FBFF</color>
+    <color name="witube_text_secondary">#C8D8DE</color>
+    <color name="witube_text_muted">#829FAB</color>
+    <color name="witube_button_text">#162A33</color>
+</resources>
