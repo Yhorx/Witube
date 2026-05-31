@@ -8,39 +8,36 @@ witubeServer.use(cors())
 witubeServer.use(express.json())
 
 witubeServer.get('/', (req, res) => {
-    res.json({
-        message: 'servidor funcionando'
-    })
-})
+    res.send('hola mundo');
+});
 
 witubeServer.listen(3000, () => {
-    console.log('servidor en el  puerto 3000');
+    console.log('server listening on port 3000');
 })
 
-// witubeServer.post('/download-audio', async (req, res) => {
+witubeServer.post('/download-audio', (req, res) => {
 
-//     const { url } = req.body;
+    const { url } = req.body;
 
-//     const process = await spawn('yt-dlp', [
-//         '-x',
-//         '--audio-format',
-//         'mp3',
-//         '-o',
-//         '/tmp/audio.%(ext)s',
-//         url
-//     ]);
+    const process = spawn('yt-dlp', [
+        '-x',
+        '--audio-format',
+        'mp3',
+        '-o',
+        '/tmp/audio.%(ext)s',
+        url
+    ]);
 
-//     process.stderr.on('data', data => {
-//         console.log(data.toString());
-//     });
+    process.stderr.on('data', data => {
+        console.log(ata.toString());
+    });
 
-//     process.on('close', (code) => {
-//         console.log('Código:', code);
-
-//         await res.download('/tmp/audio.mp3');
-//     });
-// }
-// )
+    process.on('close', (code) => {
+        console.log('Código:', code);
+        res.download('/tmp/audio.mp3');
+    });
+}
+)
 
 witubeServer.post('/info-audio', (req, res) => {
 
@@ -59,14 +56,15 @@ witubeServer.post('/info-audio', (req, res) => {
 
     process.on('close', (code) => {
 
-        if (req.ok) {
+        if (code !== 0) {
             return res.status(500).json({
-                error: 'yt-dlp falló'
+                error: 'failed process yt-dlp'
             });
         }
 
         try {
             const json = JSON.parse(output);
+
             res.json(json);
         } catch (error) {
             res.status(500).json({

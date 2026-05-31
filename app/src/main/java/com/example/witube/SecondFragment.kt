@@ -5,12 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import coil3.load
+import coil3.request.crossfade
+import coil3.request.error
+import coil3.request.placeholder
 import androidx.navigation.fragment.findNavController
 import com.example.witube.databinding.FragmentSecondBinding
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
 class SecondFragment : Fragment() {
 
 private var _binding: FragmentSecondBinding? = null
@@ -31,9 +32,30 @@ private var _binding: FragmentSecondBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSecond.setOnClickListener {
+        binding.backButton.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
+
+        val title = arguments?.getString("title").orEmpty()
+        val artist = arguments?.getString("artist").orEmpty()
+        val duration = arguments?.getString("duration").orEmpty()
+        val thumbnail = arguments?.getString("thumbnail").orEmpty()
+
+        binding.videoNameText.text = title
+        binding.artistNameText.text = artist
+        binding.durationText.text = duration
+        binding.thumbnailImage.load(thumbnail) {
+            crossfade(true)
+            placeholder(R.drawable.bg_thumbnail_placeholder)
+            error(R.drawable.bg_thumbnail_placeholder)
+        }
+
+        binding.downloadButton.setOnClickListener {
+
+        }
+
+
+
     }
 override fun onDestroyView() {
         super.onDestroyView()

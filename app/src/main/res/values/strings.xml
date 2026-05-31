@@ -3,7 +3,7 @@
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label"></string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="second_fragment_label"></string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="converter_title">Convierte video en MP3</string>
@@ -15,6 +15,19 @@
     <string name="converter_empty_error">Pega una URL para continuar.</string>
     <string name="converter_loading">Preparando audio...</string>
     <string name="converter_started">Conversion iniciada.</string>
+
+    <string name="preview_title">Vista previa</string>
+    <string name="preview_subtitle">Confirma los datos antes de descargar el MP3.</string>
+    <string name="preview_source_badge">YouTube</string>
+    <string name="preview_thumbnail_placeholder">YT</string>
+    <string name="preview_thumbnail_description">Miniatura del video</string>
+    <string name="preview_video_name_example">Nombre del video detectado</string>
+    <string name="preview_artist_example">Artista o canal detectado</string>
+    <string name="preview_duration_example">03:42</string>
+    <string name="preview_format_mp3">MP3</string>
+    <string name="preview_quality_example">320 kbps</string>
+    <string name="preview_download_button">Descargar MP3</string>
+    <string name="preview_back_button">Pegar otra URL</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
