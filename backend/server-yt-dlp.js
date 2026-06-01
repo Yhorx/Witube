@@ -18,6 +18,7 @@ witubeServer.listen(3000, () => {
 witubeServer.post('/download-audio', (req, res) => {
 
     const { url } = req.body;
+    const path = req
 
     const process = spawn('yt-dlp', [
         '-x',
@@ -29,12 +30,23 @@ witubeServer.post('/download-audio', (req, res) => {
     ]);
 
     process.stderr.on('data', data => {
-        console.log(ata.toString());
+        console.log(data.toString());
     });
 
     process.on('close', (code) => {
-        console.log('Código:', code);
-        res.download('/tmp/audio.mp3');
+
+        if (code !== 0) {
+            res.status(500).json({ error: 'process convert failed' })
+        }
+
+        try {
+            res.download('/tmp/audio.mp3');
+        } catch (err) {
+            res.status(500).json({
+                error: "failed download"
+            })
+        }
+
     });
 }
 )
@@ -66,7 +78,7 @@ witubeServer.post('/info-audio', (req, res) => {
             const json = JSON.parse(output);
 
             res.json(json);
-        } catch (error) {
+        } catch (err) {
             res.status(500).json({
                 error: 'JSON inválido'
             });

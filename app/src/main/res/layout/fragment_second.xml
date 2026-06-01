@@ -131,6 +131,57 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/saveFolderInputLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/preview_save_folder_hint"
+                        android:textColorHint="@color/witube_text_muted"
+                        app:boxBackgroundColor="@color/witube_field"
+                        app:boxCornerRadiusBottomEnd="18dp"
+                        app:boxCornerRadiusBottomStart="18dp"
+                        app:boxCornerRadiusTopEnd="18dp"
+                        app:boxCornerRadiusTopStart="18dp"
+                        app:boxStrokeColor="@color/witube_accent"
+                        app:hintTextColor="@color/witube_accent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/saveFolderEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="monospace"
+                            android:minHeight="56dp"
+                            android:singleLine="true"
+                            android:text="@string/preview_save_folder_default"
+                            android:textColor="@color/witube_text_primary" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/chooseFolderButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:layout_marginStart="10dp"
+                        android:backgroundTint="@color/witube_accent"
+                        android:fontFamily="monospace"
+                        android:minWidth="96dp"
+                        android:text="@string/preview_save_folder_button"
+                        android:textAllCaps="false"
+                        android:textColor="@color/witube_button_text"
+                        android:textStyle="bold"
+                        app:cornerRadius="18dp" />
+
+                </LinearLayout>
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/downloadButton"
                     android:layout_width="match_parent"
