@@ -19,14 +19,13 @@ const isValidUrl = (string) => {
     }
 }
 
-
 const cleanTempFiles = (id) => {
     const tempPattern = `/tmp/${id}`;
     fs.readdir('/tmp', (err, files) => {
         if (err) return;
         files.forEach(file => {
             if (file.startsWith(id)) {
-                fs.unlink(`/tmp/${file}`, () => {});
+                fs.unlink(`/tmp/${file}`, () => { });
             }
         });
     });
