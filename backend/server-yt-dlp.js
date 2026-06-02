@@ -10,7 +10,6 @@ const PORT = process.env.PORT || 3000;
 witubeServer.use(cors());
 witubeServer.use(express.json());
 
-// Helper para verificar URLs válidas
 const isValidUrl = (string) => {
     try {
         new URL(string);
@@ -18,9 +17,9 @@ const isValidUrl = (string) => {
     } catch (_) {
         return false;
     }
-};
+}
 
-// Helper para limpiar archivos temporales de forma segura
+
 const cleanTempFiles = (id) => {
     const tempPattern = `/tmp/${id}`;
     fs.readdir('/tmp', (err, files) => {
@@ -58,7 +57,6 @@ witubeServer.post('/download-audio', (req, res) => {
 
     let processFinished = false;
 
-    // 1. Si el cliente cancela la petición, abortamos el proceso inmediatamente
     req.on('close', () => {
         if (!processFinished) {
             console.log(`[Abort] Descarga cancelada por el cliente. Matando proceso de yt-dlp.`);
@@ -67,12 +65,10 @@ witubeServer.post('/download-audio', (req, res) => {
         }
     });
 
-    // Registrar logs de error para debugging
     downloadProcess.stderr.on('data', data => {
         console.log(`[yt-dlp stderr]: ${data.toString()}`);
     });
 
-    // 2. Manejo de error por si yt-dlp no se puede ejecutar
     downloadProcess.on('error', (err) => {
         processFinished = true;
         console.error('[Error de ejecución]:', err);
@@ -94,7 +90,6 @@ witubeServer.post('/download-audio', (req, res) => {
             return;
         }
 
-        // Comprobamos si el archivo de audio realmente se creó
         if (!fs.existsSync(outputFile)) {
             console.error(`[Error] El archivo de salida no fue encontrado: ${outputFile}`);
             if (!res.headersSent) {
@@ -104,9 +99,7 @@ witubeServer.post('/download-audio', (req, res) => {
         }
 
         res.download(outputFile, 'audio.mp3', (err) => {
-            // Eliminar archivos temporales de forma asíncrona una vez terminada o fallida la descarga
             cleanTempFiles(id);
-
             if (err && !res.headersSent) {
                 console.error('[Error al enviar descarga]:', err);
                 return res.status(500).json({ error: 'Failed downloading file' });
