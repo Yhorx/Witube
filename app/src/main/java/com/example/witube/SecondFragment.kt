@@ -2,6 +2,7 @@ package com.example.witube
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
 import androidx.activity.result.contract.ActivityResultContracts
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import coil3.load
 import coil3.request.crossfade
 import coil3.request.error
@@ -48,6 +50,7 @@ private var _binding: FragmentSecondBinding? = null
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -81,7 +84,7 @@ private var _binding: FragmentSecondBinding? = null
             thread {
                 try {
                     val folderUri = selectedFolderUri
-                    val resultName = if (folderUri != null) {
+                    if (folderUri != null) {
                         apiService.getDowloadAudioToFolder(
                             context = requireContext(),
                             ytUrl = url,
@@ -89,20 +92,19 @@ private var _binding: FragmentSecondBinding? = null
                             folderUri = folderUri
                         ).lastPathSegment ?: title
                     } else {
-                        apiService.getDowloadAudio(
+                        apiService.getDownloadAudio(
                             context = requireContext(),
                             ytUrl = url,
                             fileName = title
                         ).lastPathSegment ?: title
                     }
-
                     requireActivity().runOnUiThread {
                         val currentBinding = _binding ?: return@runOnUiThread
                         currentBinding.downloadButton.isEnabled = true
                         currentBinding.downloadButton.text = getString(R.string.preview_download_button)
                         Snackbar.make(
                             currentBinding.root,
-                            "Audio guardado: $title",
+                            "Audio guardado: $title en $folderUri",
                             Snackbar.LENGTH_LONG
                         ).show()
                     }

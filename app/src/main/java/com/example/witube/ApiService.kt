@@ -3,9 +3,11 @@ package com.example.witube
 import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import androidx.annotation.RequiresApi
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -64,7 +66,8 @@ class ApiService {
             )
     }
 
-    fun getDowloadAudio(context: Context, ytUrl: String, fileName: String): Uri {
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun getDownloadAudio(context: Context, ytUrl: String, fileName: String): Uri {
         val resolver = context.contentResolver
         val safeFileName = safeFileName(fileName)
         val outputUri = resolver.insert(

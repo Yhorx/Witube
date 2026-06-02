@@ -1,14 +1,19 @@
-FROM node:26-slim
+FROM node:22-bookworm-slim
 
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip ffmpeg && \
-    pip3 install --break-system-packages yt-dlp && \
-    npm install -g pnpm
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3 python3-pip ffmpeg curl ca-certificates \
+    && curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp \
+    && chmod a+rx /usr/local/bin/yt-dlp \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /witube-api
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install --omit=dev
 
 COPY . .
 
-RUN pnpm install 
+EXPOSE 3000
 
-CMD ["pnpm", "start"]
+CMD ["npm", "start"]
