@@ -33,7 +33,7 @@ class ApiService {
         val requestBody = jsonBody.toRequestBody("application/json".toMediaType())
 
         val request = Request.Builder()
-            .url("http://192.168.100.234:3000/${path}")
+            .url("https://witube.onrender.com/${path}")
             .post(requestBody)
             .build()
 
