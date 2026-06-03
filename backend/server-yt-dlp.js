@@ -25,14 +25,14 @@ const cleanTempFiles = (id) => {
         if (err) return;
         files.forEach(file => {
             if (file.startsWith(id)) {
-                fs.unlink(`/tmp/${file}`, () => {});
+                fs.unlink(`/tmp/${file}`, () => { });
             }
         });
     });
 };
 
 witubeServer.get('/', (req, res) => {
-    res.send('hola mundo (Witube API activa)');
+    res.send('(yt-dlp-server');
 });
 
 
@@ -51,6 +51,8 @@ witubeServer.post('/download-audio', (req, res) => {
     const outputFile = `/tmp/${id}.mp3`;
 
     const downloadProcess = spawn('yt-dlp', [
+        '--cookies', 'youtube-cookies.txt',
+        '--js-runtimes', 'node',
         '-x',
         '--audio-format',
         'mp3',
@@ -80,9 +82,9 @@ witubeServer.post('/download-audio', (req, res) => {
         console.error('[Error de ejecución]:', err);
         cleanTempFiles(id);
         if (!res.headersSent) {
-            return res.status(500).json({ 
+            return res.status(500).json({
                 error: 'Failed to start yt-dlp execution',
-                details: err.message 
+                details: err.message
             });
         }
     });
@@ -94,9 +96,9 @@ witubeServer.post('/download-audio', (req, res) => {
             console.error(`[Error] yt-dlp finalizó con código: ${code}`);
             cleanTempFiles(id);
             if (!res.headersSent) {
-                return res.status(500).json({ 
-                    error: 'Process convert failed', 
-                    details: stderrOutput.trim() 
+                return res.status(500).json({
+                    error: 'Process convert failed',
+                    details: stderrOutput.trim()
                 });
             }
             return;
@@ -111,7 +113,10 @@ witubeServer.post('/download-audio', (req, res) => {
         }
 
         res.download(outputFile, 'audio.mp3', (err) => {
-            cleanTempFiles(id);
+
+            setTimeout(() => {
+                cleanTempFiles(id);
+            }, 2000)
 
             if (err && !res.headersSent) {
                 console.error('[Error al enviar descarga]:', err);
@@ -121,13 +126,15 @@ witubeServer.post('/download-audio', (req, res) => {
     });
 });
 
-witubeServer.post('/info-audio', (req, res) => {
+witubeServer.post('/info-audio', async (req, res) => {
     const { url } = req.body;
     if (!url || !isValidUrl(url)) {
         return res.status(400).json({ error: 'A valid URL is required' });
     }
 
     const infoProcess = spawn('yt-dlp', [
+        '--cookies', 'youtube-cookies.txt',
+        '--js-runtimes', 'node',
         '--dump-json',
         url
     ]);
@@ -155,9 +162,9 @@ witubeServer.post('/info-audio', (req, res) => {
         processFinished = true;
         console.error('[Info Error]:', err);
         if (!res.headersSent) {
-            return res.status(500).json({ 
+            return res.status(500).json({
                 error: 'Failed to retrieve audio info',
-                details: err.message 
+                details: err.message
             });
         }
     });
@@ -167,9 +174,8 @@ witubeServer.post('/info-audio', (req, res) => {
 
         if (code !== 0) {
             if (!res.headersSent) {
-                return res.status(500).json({ 
+                return res.status(500).json({
                     error: 'Failed process yt-dlp info',
-                    details: stderrOutput.trim() 
                 });
             }
             return;
