@@ -62,13 +62,13 @@ witubeServer.post('/download-audio', (req, res) => {
     let processFinished = false;
     let stderrOutput = '';
 
-    req.on('close', () => {
-        if (!processFinished) {
-            console.log(`[Abort] Descarga cancelada por el cliente. Matando proceso de yt-dlp.`);
-            downloadProcess.kill('SIGKILL');
-            cleanTempFiles(id);
-        }
-    });
+    // req.on('close', () => {
+    //     if (!processFinished) {
+    //         console.log(`[Abort] Descarga cancelada por el cliente. Matando proceso de yt-dlp.`);
+    //         downloadProcess.kill('SIGKILL');
+    //         cleanTempFiles(id);
+    //     }
+    // });
 
     downloadProcess.stderr.on('data', data => {
         stderrOutput += data.toString();
@@ -136,11 +136,11 @@ witubeServer.post('/info-audio', (req, res) => {
     let stderrOutput = '';
     let processFinished = false;
 
-    req.on('close', () => {
-        if (!processFinished) {
-            infoProcess.kill('SIGKILL');
-        }
-    });
+    // req.on('close', () => {
+    //     if (!processFinished) {
+    //         infoProcess.kill('SIGKILL');
+    //     }
+    // });
 
     infoProcess.stdout.on('data', (data) => {
         output += data.toString();
