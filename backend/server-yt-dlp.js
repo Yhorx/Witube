@@ -7,6 +7,9 @@ import fs from 'fs';
 const witubeServer = express();
 const PORT = process.env.PORT || 3000;
 
+const cookiesPath = fs.existsSync('/etc/secrets/youtube-cookies.txt')
+    ? '/etc/secrets/youtube-cookies.txt' : 'youtube-cookies.txt';
+
 witubeServer.use(cors());
 witubeServer.use(express.json());
 
@@ -51,7 +54,7 @@ witubeServer.post('/download-audio', (req, res) => {
     const outputFile = `/tmp/${id}.mp3`;
 
     const downloadProcess = spawn('yt-dlp', [
-        '--cookies', 'youtube-cookies.txt',
+        '--cookies', cookiesPath,
         '--js-runtimes', 'node',
         '-x',
         '--audio-format',
@@ -133,7 +136,7 @@ witubeServer.post('/info-audio', async (req, res) => {
     }
 
     const infoProcess = spawn('yt-dlp', [
-        '--cookies', 'youtube-cookies.txt',
+        '--cookies', cookiesPath,
         '--js-runtimes', 'node',
         '--dump-json',
         url
@@ -176,6 +179,7 @@ witubeServer.post('/info-audio', async (req, res) => {
             if (!res.headersSent) {
                 return res.status(500).json({
                     error: 'Failed process yt-dlp info',
+                    details: stderrOutput.trim()
                 });
             }
             return;
