@@ -7,8 +7,24 @@ import fs from 'fs';
 const witubeServer = express();
 const PORT = process.env.PORT || 3000;
 
-const cookiesPath = fs.existsSync('/etc/secrets/youtube-cookies.txt')
-    ? '/etc/secrets/youtube-cookies.txt' : 'youtube-cookies.txt';
+const getWritableCookiesPath = () => {
+    const sourcePath = fs.existsSync('/etc/secrets/youtube-cookies.txt')
+        ? '/etc/secrets/youtube-cookies.txt'
+        : 'youtube-cookies.txt';
+
+    if (!fs.existsSync(sourcePath)) {
+        return null;
+    }
+
+    const targetPath = '/tmp/youtube-cookies.txt';
+    try {
+        fs.copyFileSync(sourcePath, targetPath);
+        return targetPath;
+    } catch (err) {
+        console.error('Error al copiar las cookies a /tmp:', err);
+        return sourcePath;
+    }
+};
 
 witubeServer.use(cors());
 witubeServer.use(express.json());
@@ -53,17 +69,22 @@ witubeServer.post('/download-audio', (req, res) => {
     const outputTemplate = `/tmp/${id}.%(ext)s`;
     const outputFile = `/tmp/${id}.mp3`;
 
-    const downloadProcess = spawn('yt-dlp', [
-        '--cookies', cookiesPath,
+    const cookiesPath = getWritableCookiesPath();
+    const args = [];
+
+    if (cookiesPath) {
+        args.push('--cookies', cookiesPath);
+    }
+
+    args.push(
         '--js-runtimes', 'node',
         '-x',
-        '--audio-format',
-        'mp3',
-        '-o',
-        outputTemplate,
+        '--audio-format', 'mp3',
+        '-o', outputTemplate,
         url
-    ]);
+    );
 
+    const downloadProcess = spawn('yt-dlp', args);
     let processFinished = false;
     let stderrOutput = '';
 
@@ -135,12 +156,20 @@ witubeServer.post('/info-audio', async (req, res) => {
         return res.status(400).json({ error: 'A valid URL is required' });
     }
 
-    const infoProcess = spawn('yt-dlp', [
-        '--cookies', cookiesPath,
+    const cookiesPath = getWritableCookiesPath();
+    const args = [];
+
+    if (cookiesPath) {
+        args.push('--cookies', cookiesPath);
+    }
+
+    args.push(
         '--js-runtimes', 'node',
         '--dump-json',
         url
-    ]);
+    );
+
+    const infoProcess = spawn('yt-dlp', args);
 
     let output = '';
     let stderrOutput = '';
