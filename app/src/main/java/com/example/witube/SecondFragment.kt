@@ -104,7 +104,7 @@ private var _binding: FragmentSecondBinding? = null
                         currentBinding.downloadButton.text = getString(R.string.preview_download_button)
                         Snackbar.make(
                             currentBinding.root,
-                            "Audio guardado: $title en $folderUri",
+                            "Audio guardado: $title",
                             Snackbar.LENGTH_LONG
                         ).show()
                     }

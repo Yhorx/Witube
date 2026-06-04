@@ -51,12 +51,7 @@ const cleanTempFiles = (id) => {
 };
 
 witubeServer.get('/', (req, res) => {
-    res.send('(yt-dlp-server');
-});
-
-
-witubeServer.get('/info-audio', (req, res) => {
-    res.send('info.json');
+    res.send('server-yt-dlp');
 });
 
 witubeServer.post('/download-audio', (req, res) => {
@@ -129,7 +124,7 @@ witubeServer.post('/download-audio', (req, res) => {
         }
 
         if (!fs.existsSync(outputFile)) {
-            console.error(`[Error] El archivo de salida no fue encontrado: ${outputFile}`);
+            console.error(`[Error] file not found: ${outputFile}`);
             if (!res.headersSent) {
                 return res.status(500).json({ error: 'Converted audio file not found' });
             }
