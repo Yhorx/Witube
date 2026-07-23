@@ -1,4 +1,4 @@
-package com.example.witube
+package com.example.witube.domain.model
 
 data class AudioInfo(
     val title: String,
